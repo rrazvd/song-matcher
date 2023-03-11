@@ -7,7 +7,7 @@ export const createSqliteAdapter = () => {
   })
 
   db.on('open', () => {
-    console.log('MXM Dataset has sucessfully opened.')
+    console.log('MXM Dataset has successfully opened.')
   })
 
   return db
