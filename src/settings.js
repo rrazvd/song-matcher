@@ -10,7 +10,7 @@ const STREAMING_RECOGNIZE_CONFIG = {
     sampleRateHertz: 48000,
     languageCode: LANGUAGE_CODE,
     model: 'latest_long',
-    audioChannelCount: 2,
+    audioChannelCount: 1,
   },
   interimResults: true,
 }
