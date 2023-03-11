@@ -1,5 +1,12 @@
 import express from 'express'
-import { SERVER_PORT, MXM_DATASET_PATH } from './settings'
+
+import {
+  SERVER_PORT,
+  M3U8_URL,
+  MXM_DATASET_PATH,
+  STREAMING_RECOGNITION_CONFIG
+} from './settings'
+
 import { createSongMatcherPipeline } from './job'
 import { createSqliteDatabase } from './databases'
 
@@ -9,8 +16,11 @@ app.listen(SERVER_PORT, () => {
   console.log(`Song matcher listening on port ${SERVER_PORT}`)
 })
 
-const database = createSqliteDatabase(MXM_DATASET_PATH)
-const songMatcherPipeline = createSongMatcherPipeline(database)
+const songMatcherPipeline = createSongMatcherPipeline({
+  database: createSqliteDatabase(MXM_DATASET_PATH),
+  m3u8Url: M3U8_URL,
+  transcriptorConfig: STREAMING_RECOGNITION_CONFIG
+})
 
 app.get('/', (req, res) => {
   res.writeHead(200, {

@@ -6,7 +6,7 @@ const {
 
 const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'
 
-const STREAMING_RECOGNIZE_CONFIG = {
+const STREAMING_RECOGNITION_CONFIG = {
   config: {
     encoding: 'FLAC',
     sampleRateHertz: 48000,
@@ -20,6 +20,6 @@ const STREAMING_RECOGNIZE_CONFIG = {
 export {
   SERVER_PORT,
   M3U8_URL,
-  STREAMING_RECOGNIZE_CONFIG,
+  STREAMING_RECOGNITION_CONFIG,
   MXM_DATASET_PATH
 }

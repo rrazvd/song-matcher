@@ -48,4 +48,4 @@ class TextSegmenter extends Transform {
   }
 }
 
-export const textSegmenter = new TextSegmenter()
+export const textSegmenter = () => new TextSegmenter()
