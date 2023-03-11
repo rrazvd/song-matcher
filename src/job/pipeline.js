@@ -2,7 +2,7 @@ import {
   audioExtractor,
   audioTranscriptor,
   songMatcher,
-  textSegmenter,
+  textSegmenter
 } from './streams'
 
 export const getSongMatcherStream = () => audioExtractor

@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream; charset=utf-8',
     'Cache-Control': 'no-cache',
-    Connection: 'keep-alive',
+    Connection: 'keep-alive'
   })
   songMatcherStream.pipe(res)
 })

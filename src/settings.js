@@ -2,6 +2,7 @@ const {
   SERVER_PORT = 3000,
   M3U8_URL = '',
   LANGUAGE_CODE = 'pt-BR',
+  MXM_DATASET_PATH = './src/db-adapters/mxm_dataset.db'
 } = process.env
 
 const STREAMING_RECOGNIZE_CONFIG = {
@@ -10,13 +11,14 @@ const STREAMING_RECOGNIZE_CONFIG = {
     sampleRateHertz: 48000,
     languageCode: LANGUAGE_CODE,
     model: 'latest_long',
-    audioChannelCount: 1,
+    audioChannelCount: 1
   },
-  interimResults: true,
+  interimResults: true
 }
 
 export {
   SERVER_PORT,
   M3U8_URL,
   STREAMING_RECOGNIZE_CONFIG,
+  MXM_DATASET_PATH
 }

@@ -5,5 +5,5 @@ export const songMatcher = new Transform({
   transform(chunk, _, next) {
     const word = chunk
     next(null, ` ${word}`)
-  },
+  }
 })
