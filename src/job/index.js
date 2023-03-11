@@ -1,1 +1,1 @@
-export { getSongMatcherStream } from './pipeline'
+export { createSongMatcherPipeline } from './pipeline'

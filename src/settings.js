@@ -4,7 +4,7 @@ const {
   LANGUAGE_CODE = 'pt-BR'
 } = process.env
 
-const MXM_DATASET_PATH = './src/db-adapters/mxm_dataset.db'
+const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'
 
 const STREAMING_RECOGNIZE_CONFIG = {
   config: {

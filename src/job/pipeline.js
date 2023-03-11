@@ -5,7 +5,7 @@ import {
   textSegmenter
 } from './streams'
 
-export const getSongMatcherStream = () => audioExtractor
+export const createSongMatcherPipeline = (database) => audioExtractor
   .pipe(audioTranscriptor)
   .pipe(textSegmenter)
-  .pipe(songMatcher)
+  .pipe(songMatcher(database))
