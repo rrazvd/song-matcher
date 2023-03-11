@@ -1,9 +1,10 @@
 const {
   SERVER_PORT = 3000,
   M3U8_URL = '',
-  LANGUAGE_CODE = 'pt-BR',
-  MXM_DATASET_PATH = './src/db-adapters/mxm_dataset.db'
+  LANGUAGE_CODE = 'pt-BR'
 } = process.env
+
+const MXM_DATASET_PATH = './src/db-adapters/mxm_dataset.db'
 
 const STREAMING_RECOGNIZE_CONFIG = {
   config: {
