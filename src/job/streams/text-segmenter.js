@@ -11,12 +11,10 @@ const getNewWords = (oldString, newString) => {
   if (oldStringArrayLength === 0) return newStringArray
 
   const lengthDiff = newStringArrayLength - oldStringArrayLength
+  const startsWithSameWord = oldString.startsWith(newStringArray[0])
 
-  // when the diff between strings is greater than 0 it means that there are new words
-  const thereAreNewWords = lengthDiff > 0
-
-  // if there are no new words the return should be empty array
-  if (!thereAreNewWords) return []
+  if (lengthDiff <= 0 && startsWithSameWord) return []
+  if (lengthDiff <= 0 && !startsWithSameWord) return newStringArray
 
   // the first new word position on new string array is the old string length
   const firstNewWordPosition = oldStringArrayLength
@@ -30,7 +28,7 @@ const getNewWords = (oldString, newString) => {
 }
 
 class TextSegmenter extends Transform {
-  lastTranscript = ''
+  previousTranscript = ''
 
   constructor() {
     super({ objectMode: true })
@@ -38,10 +36,10 @@ class TextSegmenter extends Transform {
 
   _transform(chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
-    const newWords = getNewWords(this.lastTranscript, currentTranscript)
+    const newWords = getNewWords(this.previousTranscript, currentTranscript)
 
     if (currentTranscript) {
-      this.lastTranscript = currentTranscript
+      this.previousTranscript = currentTranscript
     }
 
     newWords.forEach((word) => this.push(word))
