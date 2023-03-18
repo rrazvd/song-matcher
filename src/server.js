@@ -2,7 +2,7 @@ import express from 'express'
 
 import {
   SERVER_PORT,
-  M3U8_URL,
+  STREAMING_URL,
   MXM_DATASET_PATH,
   STREAMING_RECOGNITION_CONFIG
 } from './settings'
@@ -18,7 +18,7 @@ app.listen(SERVER_PORT, () => {
 
 const songMatcherPipeline = createSongMatcherPipeline({
   database: createSqliteDatabase(MXM_DATASET_PATH),
-  m3u8Url: M3U8_URL,
+  streamingUrl: STREAMING_URL,
   transcriptorConfig: STREAMING_RECOGNITION_CONFIG
 })
 

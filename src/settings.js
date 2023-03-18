@@ -1,6 +1,6 @@
 const {
   SERVER_PORT = 3000,
-  M3U8_URL = '',
+  STREAMING_URL = '',
   LANGUAGE_CODE = 'pt-BR'
 } = process.env
 
@@ -19,7 +19,7 @@ const STREAMING_RECOGNITION_CONFIG = {
 
 export {
   SERVER_PORT,
-  M3U8_URL,
+  STREAMING_URL,
   STREAMING_RECOGNITION_CONFIG,
   MXM_DATASET_PATH
 }

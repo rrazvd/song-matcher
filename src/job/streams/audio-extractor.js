@@ -1,7 +1,7 @@
 import ffmpeg from 'fluent-ffmpeg'
 
-export const audioExtractor = ({ m3u8Url }) => ffmpeg()
-  .input(m3u8Url)
+export const audioExtractor = ({ streamingUrl }) => ffmpeg()
+  .input(streamingUrl)
   .withNoVideo()
   .withOutputFormat('flac')
   .withAudioCodec('flac')

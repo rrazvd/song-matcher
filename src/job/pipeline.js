@@ -7,9 +7,9 @@ import {
 
 export const createSongMatcherPipeline = ({
   database,
-  m3u8Url,
+  streamingUrl,
   transcriptorConfig
-}) => audioExtractor({ m3u8Url })
+}) => audioExtractor({ streamingUrl })
   .pipe(audioTranscriptor({ config: transcriptorConfig }))
   .pipe(textSegmenter())
   .pipe(songMatcher({ database }))
