@@ -1,30 +1,44 @@
 import { Transform } from 'stream'
 import _get from 'lodash/get'
 
+const sanitizeArray = (arr) => arr.filter((word) => word !== '')
+
 const getNewWords = (oldString, newString) => {
-  const oldStringArray = oldString.split(' ')
-  const newStringArray = newString.split(' ')
+  const newStringArray = sanitizeArray(newString.split(' '))
+  const oldStringArray = sanitizeArray(oldString.split(' '))
+
   const newStringArrayLength = newStringArray.length
   const oldStringArrayLength = oldStringArray.length
 
-  // if old string array is empty, new words are the entire new string array
-  if (oldStringArrayLength === 0) return newStringArray
+  // if (oldStringArrayLength === 0) return newStringArray
 
-  const lengthDiff = newStringArrayLength - oldStringArrayLength
-  const startsWithSameWord = oldString.startsWith(newStringArray[0])
+  const wordsDiff = newStringArrayLength - oldStringArrayLength
 
-  if (lengthDiff <= 0 && startsWithSameWord) return []
-  if (lengthDiff <= 0 && !startsWithSameWord) return newStringArray
+  console.log('------------------------------')
+  console.log(`Old string: ${oldStringArray}\n`)
+  console.log(`New string: ${newStringArray}\n`)
 
-  // the first new word position on new string array is the old string length
-  const firstNewWordPosition = oldStringArrayLength
+  console.log(`Length diff: ${wordsDiff}`)
 
-  const newWords = []
-  for (let i = firstNewWordPosition; i < newStringArrayLength; i++) {
-    newWords.push(newStringArray[i])
+  if (wordsDiff > 0) {
+    const isSubstring = newString.includes(oldString)
+    console.log(`Contains same sentence: ${isSubstring}`)
+    const words = newStringArray.slice(oldStringArrayLength)
+    return isSubstring ? words : newStringArray
   }
 
-  return newWords
+  if (wordsDiff < 0) {
+    const isSubstring = oldString.startsWith(newString.substr(0, oldString.length / 2))
+
+    console.log(`Contains same sentence: ${isSubstring}`)
+    return isSubstring ? [] : newStringArray
+  }
+
+  const isSubstring = newString.includes(oldString)
+  console.log(`Contains same sentence: ${isSubstring}`)
+  if (isSubstring) return []
+
+  return newStringArray
 }
 
 class TextSegmenter extends Transform {
@@ -36,13 +50,19 @@ class TextSegmenter extends Transform {
 
   _transform(chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
-    const newWords = getNewWords(this.previousTranscript, currentTranscript)
 
-    if (currentTranscript) {
-      this.previousTranscript = currentTranscript
-    }
+    // const currentTranscriptLastWord = currentTranscriptArray.pop()
+
+    const newWords = getNewWords(
+      this.previousTranscript.toLowerCase(),
+      currentTranscript.toLowerCase()
+    )
+
+    console.log('New words: ', newWords.join(' '), '\n')
 
     newWords.forEach((word) => this.push(word))
+
+    this.previousTranscript = currentTranscript
 
     next()
   }
