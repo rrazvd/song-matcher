@@ -10,14 +10,11 @@ const getNewWords = (oldString, newString) => {
   const newStringArrayLength = newStringArray.length
   const oldStringArrayLength = oldStringArray.length
 
-  // if (oldStringArrayLength === 0) return newStringArray
-
   const wordsDiff = newStringArrayLength - oldStringArrayLength
 
   console.log('------------------------------')
   console.log(`Old string: ${oldStringArray}\n`)
   console.log(`New string: ${newStringArray}\n`)
-
   console.log(`Length diff: ${wordsDiff}`)
 
   if (wordsDiff > 0) {
@@ -29,7 +26,6 @@ const getNewWords = (oldString, newString) => {
 
   if (wordsDiff < 0) {
     const isSubstring = oldString.startsWith(newString.substr(0, oldString.length / 2))
-
     console.log(`Contains same sentence: ${isSubstring}`)
     return isSubstring ? [] : newStringArray
   }
@@ -50,8 +46,6 @@ class TextSegmenter extends Transform {
 
   _transform(chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
-
-    // const currentTranscriptLastWord = currentTranscriptArray.pop()
 
     const newWords = getNewWords(
       this.previousTranscript.toLowerCase(),
