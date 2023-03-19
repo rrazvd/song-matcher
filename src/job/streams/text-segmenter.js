@@ -18,16 +18,16 @@ const getNewWords = (oldString, newString) => {
   console.log(`Length diff: ${wordsDiff}`)
 
   if (wordsDiff > 0) {
-    const isSubstring = newString.includes(oldString)
-    console.log(`Contains same sentence: ${isSubstring}`)
+    const startsWithSameWord = newStringArray[0] === oldStringArray[0]
+    console.log(`Start with same word ${startsWithSameWord}`)
     const words = newStringArray.slice(oldStringArrayLength)
-    return isSubstring ? words : newStringArray
+    return startsWithSameWord ? words : newStringArray
   }
 
   if (wordsDiff < 0) {
-    const isSubstring = oldString.startsWith(newString.substr(0, oldString.length / 2))
-    console.log(`Contains same sentence: ${isSubstring}`)
-    return isSubstring ? [] : newStringArray
+    const startsWithSameWord = newStringArray[0] === oldStringArray[0]
+    console.log(`Start with same word ${startsWithSameWord}`)
+    return startsWithSameWord ? [] : newStringArray
   }
 
   const isSubstring = newString.includes(oldString)
