@@ -11,30 +11,32 @@ const getNewWords = (oldString, newString) => {
   const oldStringArrayLength = oldStringArray.length
 
   const wordsDiff = newStringArrayLength - oldStringArrayLength
+  const startsWithSameWord = newStringArray[0] === oldStringArray[0]
 
   console.log('------------------------------')
   console.log(`Old string: ${oldStringArray}\n`)
   console.log(`New string: ${newStringArray}\n`)
   console.log(`Length diff: ${wordsDiff}`)
+  console.log(`Start with same word ${startsWithSameWord}`)
 
   if (wordsDiff > 0) {
-    const startsWithSameWord = newStringArray[0] === oldStringArray[0]
-    console.log(`Start with same word ${startsWithSameWord}`)
     const words = newStringArray.slice(oldStringArrayLength)
     return startsWithSameWord ? words : newStringArray
   }
 
   if (wordsDiff < 0) {
-    const startsWithSameWord = newStringArray[0] === oldStringArray[0]
-    console.log(`Start with same word ${startsWithSameWord}`)
     return startsWithSameWord ? [] : newStringArray
   }
 
+  const newStringLastWord = newStringArray[newStringArrayLength - 1]
+  const oldStringLastWord = oldStringArray[oldStringArrayLength - 1]
+
   const isSubstring = newString.includes(oldString)
   console.log(`Contains same sentence: ${isSubstring}`)
-  if (isSubstring) return []
 
-  return newStringArray
+  if (isSubstring) return newStringLastWord === oldStringLastWord ? [] : [newStringLastWord]
+
+  return startsWithSameWord ? [] : newStringArray
 }
 
 class TextSegmenter extends Transform {
