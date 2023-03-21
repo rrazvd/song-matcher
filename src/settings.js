@@ -1,6 +1,8 @@
 const {
   SERVER_PORT = 3000,
   STREAMING_URL = '',
+  STREAM_ENCODING = 'FLAC',
+  STREAM_SAMPLE_RATE_HERTZ = 48000,
   LANGUAGE_CODE = 'pt-BR'
 } = process.env
 
@@ -8,8 +10,8 @@ const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'
 
 const STREAMING_RECOGNITION_CONFIG = {
   config: {
-    encoding: 'FLAC',
-    sampleRateHertz: 48000,
+    encoding: STREAM_ENCODING,
+    sampleRateHertz: STREAM_SAMPLE_RATE_HERTZ,
     languageCode: LANGUAGE_CODE,
     model: 'latest_long',
     audioChannelCount: 1
