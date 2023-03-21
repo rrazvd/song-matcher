@@ -3,7 +3,7 @@ import {
   audioTranscriptor,
   songMatcher,
   textSegmenter,
-  wordSupress
+  wordSuppressor
 } from './streams'
 
 export const createSongMatcherPipeline = ({
@@ -13,5 +13,5 @@ export const createSongMatcherPipeline = ({
 }) => audioExtractor({ streamingUrl })
   .pipe(audioTranscriptor({ config: transcriptorConfig }))
   .pipe(textSegmenter())
-  .pipe(wordSupress())
+  .pipe(wordSuppressor())
   .pipe(songMatcher({ database }))
