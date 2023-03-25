@@ -13,11 +13,11 @@ const getNewWords = (oldString, newString) => {
   const wordsDiff = newStringArrayLength - oldStringArrayLength
   const startsWithSameWord = newStringArray[0] === oldStringArray[0]
 
-  console.log('------------------------------')
+  /*   console.log('------------------------------')
   console.log(`Old string: ${oldStringArray.join(' ')}\n`)
   console.log(`New string: ${newStringArray.join(' ')}\n`)
   console.log(`Length diff: ${wordsDiff}`)
-  console.log(`Start with same word: ${startsWithSameWord}`)
+  console.log(`Start with same word: ${startsWithSameWord}`) */
 
   if (wordsDiff > 0) {
     const words = newStringArray.slice(oldStringArrayLength)
@@ -32,7 +32,7 @@ const getNewWords = (oldString, newString) => {
   const oldStringLastWord = oldStringArray[oldStringArrayLength - 1]
 
   const isSubstring = newString.includes(oldString)
-  console.log(`Contains same sentence: ${isSubstring}`)
+  // console.log(`Contains same sentence: ${isSubstring}`)
 
   if (isSubstring) return newStringLastWord === oldStringLastWord ? [] : [newStringLastWord]
 
