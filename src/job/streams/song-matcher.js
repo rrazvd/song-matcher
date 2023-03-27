@@ -5,7 +5,7 @@ class SongMatcher extends Transform {
 
   wordCount = 0
 
-  ranking = {}
+  matchedIds = {}
 
   constructor(database) {
     super({ objectMode: true })
@@ -16,25 +16,25 @@ class SongMatcher extends Transform {
     const word = chunk
 
     if (this.wordCount === 20) {
-      const sortedRanking = Object
-        .keys(this.ranking)
-        .sort((a, b) => this.ranking[b] - this.ranking[a])
+      const ranking = Object
+        .keys(this.matchedIds)
+        .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
         .slice(0, 5)
 
-      this.push(JSON.stringify(sortedRanking, null, 2))
+      this.push(JSON.stringify(ranking, null, 2))
 
-      this.ranking = {}
+      this.matchedIds = {}
       this.wordCount = 0
     }
 
     this.database.all(`SELECT mxm_tid FROM lyrics where word='${word}'`, (err, rows) => {
-      rows.forEach(({ mxm_tid: mxmId }) => {
-        if (this.ranking[mxmId] === undefined) {
-          this.ranking[mxmId] = 1
+      rows.forEach(({ mxm_tid: musicId }) => {
+        if (this.matchedIds[musicId] === undefined) {
+          this.matchedIds[musicId] = 1
           return
         }
 
-        this.ranking[mxmId] += 1
+        this.matchedIds[musicId] += 1
       })
     })
 
