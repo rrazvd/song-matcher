@@ -54,7 +54,7 @@ class TextSegmenter extends Transform {
       currentTranscript.toLowerCase()
     )
 
-    console.log('New words: ', newWords.join(' '), '\n')
+    // console.log('New words: ', newWords.join(' '), '\n')
 
     newWords.forEach((word) => this.push(word))
     this.previousTranscript = currentTranscript
