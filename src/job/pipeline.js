@@ -9,9 +9,10 @@ import {
 export const createSongMatcherPipeline = ({
   database,
   streamingUrl,
-  transcriptorConfig
+  transcriptorConfig,
+  songMatcherWindowSize
 }) => audioExtractor({ streamingUrl })
   .pipe(audioTranscriptor({ config: transcriptorConfig }))
   .pipe(textSegmenter())
   .pipe(wordSuppressor())
-  .pipe(songMatcher({ database }))
+  .pipe(songMatcher({ database, windowSize: songMatcherWindowSize }))

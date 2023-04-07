@@ -3,15 +3,16 @@ import { Transform } from 'stream'
 class SongMatcher extends Transform {
   static database = undefined
 
-  WINDOW_SIZE = 10
-
-  matchedIds = {}
+  WINDOW_SIZE
 
   window = []
 
-  constructor(database) {
+  matchedIds = {}
+
+  constructor(database, windowSize) {
     super({ objectMode: true })
     this.database = database
+    this.WINDOW_SIZE = windowSize
   }
 
   _transform(chunk, _, next) {
@@ -41,7 +42,7 @@ class SongMatcher extends Transform {
     const ranking = Object
       .keys(this.matchedIds)
       .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
-      .slice(0, 10)
+      .slice(0, 5)
       .map((musicId, index) => (
         {
           musicId,
@@ -55,4 +56,4 @@ class SongMatcher extends Transform {
   }
 }
 
-export const songMatcher = ({ database }) => new SongMatcher(database)
+export const songMatcher = ({ database, windowSize }) => new SongMatcher(database, windowSize)
