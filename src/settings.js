@@ -3,7 +3,7 @@ const {
   STREAMING_URL = '',
   STREAM_SAMPLE_RATE_HERTZ = 48000,
   LANGUAGE_CODE = 'pt-BR',
-  SONG_MATCHER_WINDOW_SIZE = 10
+  SONG_MATCHER_WINDOW_SIZE = 20
 } = process.env
 
 const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'

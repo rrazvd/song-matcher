@@ -18,7 +18,9 @@ class SongMatcher extends Transform {
   _transform(chunk, _, next) {
     const word = chunk
 
+    // query the database with the current transcribed word
     this.database.all(`SELECT mxm_tid FROM lyrics where word='${word}'`, (err, rows) => {
+      // increase a counter for each matched id
       rows.forEach(({ mxm_tid: musicId }) => {
         if (this.matchedIds[musicId] === undefined) {
           this.matchedIds[musicId] = 1
@@ -26,19 +28,26 @@ class SongMatcher extends Transform {
         }
         this.matchedIds[musicId] += 1
       })
-      if (this.window.length <= this.WINDOW_SIZE) this.window.push(rows)
+
+      // update window with new matched ids
+      this.window.push(rows)
+
+      if (this.window.length > this.WINDOW_SIZE) {
+        // update window removing expired matched ids
+        const expiredMatchedIds = this.window.shift()
+
+        // decrease a counter for each expired matched id
+        expiredMatchedIds.forEach(({ mxm_tid: musicId }) => {
+          if (this.matchedIds[musicId] > 1) {
+            this.matchedIds[musicId] -= 1
+            return
+          }
+          delete this.matchedIds[musicId]
+        })
+      }
     })
 
-    if (this.window.length > this.WINDOW_SIZE) {
-      this.window.shift().forEach(({ mxm_tid: musicId }) => {
-        if (this.matchedIds[musicId] > 1) {
-          this.matchedIds[musicId] -= 1
-          return
-        }
-        delete this.matchedIds[musicId]
-      })
-    }
-
+    // compute a descending ranking
     const ranking = Object
       .keys(this.matchedIds)
       .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
