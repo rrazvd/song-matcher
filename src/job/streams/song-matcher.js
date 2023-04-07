@@ -55,7 +55,7 @@ class SongMatcher extends Transform {
       .map((musicId, index) => (
         {
           musicId,
-          count: this.matchedIds[musicId],
+          score: (this.matchedIds[musicId] / this.WINDOW_SIZE) * 100,
           position: index + 1
         }
       ))
