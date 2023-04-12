@@ -1,5 +1,8 @@
 import express from 'express'
 
+import { createSongMatcherPipeline } from './job'
+import { createSqliteDatabase } from './databases'
+
 import {
   SERVER_PORT,
   STREAMING_URL,
@@ -7,9 +10,6 @@ import {
   STREAMING_RECOGNITION_CONFIG,
   SONG_MATCHER_WINDOW_SIZE
 } from './settings'
-
-import { createSongMatcherPipeline } from './job'
-import { createSqliteDatabase } from './databases'
 
 const app = express()
 

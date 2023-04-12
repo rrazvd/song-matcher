@@ -37,7 +37,7 @@ const getNewWords = (oldString, newString) => {
   return newStringArray
 }
 
-class TextSegmenter extends Transform {
+class TranscriptTokenizer extends Transform {
   previousTranscript = ''
 
   constructor() {
@@ -56,4 +56,4 @@ class TextSegmenter extends Transform {
   }
 }
 
-export const textSegmenter = () => new TextSegmenter()
+export const transcriptTokenizer = () => new TranscriptTokenizer()
