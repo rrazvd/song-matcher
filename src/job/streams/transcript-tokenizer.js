@@ -1,44 +1,32 @@
 import { Transform } from 'stream'
 import _get from 'lodash/get'
 
-const getStringArray = (str) => str
+const getTokens = (str) => str
   .toLowerCase()
   .split(' ')
-  .filter((word) => word !== '')
+  .filter((tkn) => tkn !== '')
 
-const getNewWords = (oldString, newString) => {
-  const newStringArray = getStringArray(newString)
-  const oldStringArray = getStringArray(oldString)
+const getNewTokens = (lastTranscript, currentTranscript) => {
+  const currentTokens = getTokens(currentTranscript)
+  const lastTokens = getTokens(lastTranscript)
 
-  const newStringArrayLength = newStringArray.length
-  const oldStringArrayLength = oldStringArray.length
+  const tknDiff = currentTokens.length - lastTokens.length
+  const isFirstTokenEqual = currentTokens[0] === lastTokens[0]
 
-  const wordsDiff = newStringArrayLength - oldStringArrayLength
-  const startsWithSameWord = newStringArray[0] === oldStringArray[0]
+  if (tknDiff > 0) return isFirstTokenEqual ? currentTokens.slice(lastTokens.length) : currentTokens
+  if (tknDiff < 0) return isFirstTokenEqual ? [] : currentTokens
 
-  if (wordsDiff > 0) {
-    const words = newStringArray.slice(oldStringArrayLength)
-    return startsWithSameWord ? words : newStringArray
-  }
+  const hasTheSameTokens = lastTokens.join(' ') === currentTokens.join(' ')
+  if (hasTheSameTokens) return []
 
-  if (wordsDiff < 0) {
-    return startsWithSameWord ? [] : newStringArray
-  }
+  const isLastTokenSimilar = currentTokens.at(-1).startsWith(lastTokens.at(-1))
+  if (isFirstTokenEqual && isLastTokenSimilar) return [currentTokens.at(-1)]
 
-  if (oldStringArray.join(' ') === newStringArray.join(' ')) return []
-
-  const newStringLastWord = newStringArray[newStringArrayLength - 1]
-  const oldStringLastWord = oldStringArray[oldStringArrayLength - 1]
-
-  const isLastWordIncomplete = newStringLastWord.startsWith(oldStringLastWord)
-
-  if (startsWithSameWord && isLastWordIncomplete) return [newStringLastWord]
-
-  return newStringArray
+  return currentTokens
 }
 
 class TranscriptTokenizer extends Transform {
-  previousTranscript = ''
+  lastTranscript = ''
 
   constructor() {
     super({ objectMode: true })
@@ -47,11 +35,10 @@ class TranscriptTokenizer extends Transform {
   _transform(chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
 
-    const newWords = getNewWords(this.previousTranscript, currentTranscript)
+    const tokens = getNewTokens(this.lastTranscript, currentTranscript)
+    tokens.forEach((token) => this.push(token))
 
-    newWords.forEach((word) => this.push(word))
-
-    this.previousTranscript = currentTranscript
+    this.lastTranscript = currentTranscript
     next()
   }
 }
