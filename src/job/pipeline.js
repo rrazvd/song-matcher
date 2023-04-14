@@ -3,7 +3,7 @@ import {
   audioTranscriptor,
   songMatcher,
   transcriptTokenizer,
-  wordSuppressor
+  tokenSuppressor
 } from './streams'
 
 export const createSongMatcherPipeline = ({
@@ -14,5 +14,5 @@ export const createSongMatcherPipeline = ({
 }) => audioExtractor({ streamingUrl })
   .pipe(audioTranscriptor({ config: transcriptorConfig }))
   .pipe(transcriptTokenizer())
-  .pipe(wordSuppressor())
+  .pipe(tokenSuppressor())
   .pipe(songMatcher({ database, windowSize: songMatcherWindowSize }))
