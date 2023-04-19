@@ -59,6 +59,7 @@ class SongMatcher extends Transform {
       .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
       .slice(0, 5)
       .map((songId) => ({ songId, score: this.calculateScore(songId) }))
+      .filter(({ score }) => score > 60)
   }
 }
 
