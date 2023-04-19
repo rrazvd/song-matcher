@@ -11,10 +11,21 @@ class SongMatcher extends Transform {
   }
 
   _transform(chunk, _, next) {
-    const word = chunk
+    const token = chunk
 
+    // process the current token
+    this.processToken(token)
+
+    // compute a descending ranking
+    const ranking = this.getRanking()
+
+    this.push(`${JSON.stringify(ranking, null, 2)}\n\n`)
+    next()
+  }
+
+  processToken(token) {
     // query the database with the current transcribed word
-    this.database.all(`SELECT mxm_tid FROM lyrics where word='${word}'`, (err, rows) => {
+    this.database.all(`SELECT mxm_tid FROM lyrics where word='${token}'`, (err, rows) => {
       // update window with new matched ids
       this.window.push(rows)
 
@@ -41,16 +52,6 @@ class SongMatcher extends Transform {
         })
       }
     })
-
-    // compute a descending ranking
-    const ranking = this.getRanking()
-
-    this.push(`${JSON.stringify(ranking, null, 2)}\n\n`)
-    next()
-  }
-
-  calculateScore(songId) {
-    return Math.round((this.matchedIds[songId] / this.WINDOW_SIZE) * 100)
   }
 
   getRanking() {
@@ -60,6 +61,10 @@ class SongMatcher extends Transform {
       .slice(0, 5)
       .map((songId) => ({ songId, score: this.calculateScore(songId) }))
       .filter(({ score }) => score > 60)
+  }
+
+  calculateScore(songId) {
+    return Math.round((this.matchedIds[songId] / this.WINDOW_SIZE) * 100)
   }
 }
 
