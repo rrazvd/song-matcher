@@ -6,10 +6,7 @@ const getTokens = (str) => str
   .split(' ')
   .filter((tkn) => tkn !== '')
 
-const getNewTokens = (lastTranscript, currentTranscript) => {
-  const currentTokens = getTokens(currentTranscript)
-  const lastTokens = getTokens(lastTranscript)
-
+const getNewTokens = (lastTokens, currentTokens) => {
   const tknDiff = currentTokens.length - lastTokens.length
   const isFirstTokenEqual = currentTokens[0] === lastTokens[0]
 
@@ -35,7 +32,10 @@ class TranscriptTokenizer extends Transform {
   _transform(chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
 
-    const tokens = getNewTokens(this.lastTranscript, currentTranscript)
+    const currentTokens = getTokens(currentTranscript)
+    const lastTokens = getTokens(this.lastTranscript)
+
+    const tokens = getNewTokens(lastTokens, currentTokens)
     tokens.forEach((token) => this.push(token))
 
     this.lastTranscript = currentTranscript
