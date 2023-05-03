@@ -1,1 +1,2 @@
-export { createSongMatcherPipeline } from './pipeline'
+export { createAudioTranscriptorPipeline } from './pipelines'
+export { createSongMatcherPipeline } from './pipelines'

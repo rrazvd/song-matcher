@@ -8,6 +8,7 @@ class SongMatcher extends Transform {
     this.WINDOW_SIZE = windowSize
     this.window = []
     this.matchedIds = {}
+    this.hasSettedInterval = false
   }
 
   _transform(chunk, _, next) {
@@ -16,10 +17,15 @@ class SongMatcher extends Transform {
     // process the current token
     this.processToken(token)
 
-    // compute a descending ranking
-    const ranking = this.getRanking()
+    if (!this.hasSettedInterval) {
+      setInterval(() => {
+        // compute a descending ranking
+        const ranking = this.getRanking()
+        this.push(`${JSON.stringify(ranking, null, 2)}\n\n`)
+        this.hasSettedInterval = true
+      }, 5000)
+    }
 
-    this.push(`${JSON.stringify(ranking, null, 2)}\n\n`)
     next()
   }
 
@@ -60,7 +66,6 @@ class SongMatcher extends Transform {
       .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
       .slice(0, 5)
       .map((songId) => ({ songId, score: this.calculateScore(songId) }))
-      .filter(({ score }) => score > 60)
   }
 
   calculateScore(songId) {
