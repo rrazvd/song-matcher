@@ -15,10 +15,11 @@ export const createAudioTranscriptorPipeline = ({
   .pipe(audioTranscriptor({ config: transcriptorConfig }))
 
 export const createSongMatcherPipeline = ({
+  songMatcherWindowSize,
   database,
-  songMatcherWindowSize
+  cache
 }) => compose(
   transcriptTokenizer(),
   tokenSuppressor(),
-  songMatcher({ database, windowSize: songMatcherWindowSize })
+  songMatcher({ windowSize: songMatcherWindowSize, database, cache })
 )

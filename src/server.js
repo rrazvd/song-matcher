@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { createSongMatcherPipeline, createAudioTranscriptorPipeline } from './job'
-import { createSqliteDatabase } from './databases'
+import { createRedisDatabase, createSqliteDatabase } from './databases'
 
 import {
   SERVER_PORT,
@@ -15,8 +15,9 @@ import {
 let audioTranscriptor = null
 
 const songMatcherPipeline = createSongMatcherPipeline({
+  songMatcherWindowSize: SONG_MATCHER_WINDOW_SIZE,
   database: createSqliteDatabase(MXM_DATASET_PATH),
-  songMatcherWindowSize: SONG_MATCHER_WINDOW_SIZE
+  cache: createRedisDatabase()
 })
 
 const speechCallback = (stream) => {
