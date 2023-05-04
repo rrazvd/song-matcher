@@ -7,8 +7,6 @@ const {
   AUDIO_TRANSCRIPT_RESTART_INTERVAL = 30000
 } = process.env
 
-const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'
-
 const STREAMING_RECOGNITION_CONFIG = {
   config: {
     encoding: 'FLAC',
@@ -19,6 +17,8 @@ const STREAMING_RECOGNITION_CONFIG = {
   },
   interimResults: true
 }
+
+const MXM_DATASET_PATH = './src/databases/mxm_dataset.db'
 
 export {
   SERVER_PORT,
