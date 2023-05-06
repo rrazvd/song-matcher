@@ -19,5 +19,5 @@ app.get('/', (req, res) => {
     Connection: 'keep-alive'
   })
 
-  songMatcher.on('data', (data) => res.write(data))
+  songMatcher.on('data', (data) => res.write(`data: ${JSON.stringify({ timestamp: Date.now(), ranking: data })}\n\n`))
 })

@@ -20,7 +20,7 @@ class SongMatcher extends Transform {
 
     // compute a descending ranking
     const ranking = this.getRanking()
-    this.push(`${JSON.stringify({ timestamp: Date.now(), ranking }, null, 2)}\n\n`)
+    this.push(ranking)
 
     next()
   }
