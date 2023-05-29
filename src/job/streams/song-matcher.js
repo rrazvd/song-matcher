@@ -43,6 +43,7 @@ class SongMatcher extends Transform {
   }
 
   updateMatchs(rows) {
+    if (!rows) return
     // update window with new matched ids
     this.window.push(rows)
 
