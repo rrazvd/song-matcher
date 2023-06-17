@@ -22,25 +22,23 @@ const getNewTokens = (lastTokens, currentTokens) => {
   return currentTokens
 }
 
-class TranscriptTokenizer extends Transform {
-  lastTranscript = ''
+export const transcriptTokenizer = () => {
+  let lastTranscript = ''
 
-  constructor() {
-    super({ objectMode: true })
-  }
+  const stream = new Transform({ objectMode: true })
 
-  _transform(chunk, _, next) {
+  stream._transform = function (chunk, _, next) {
     const currentTranscript = _get(chunk, 'results[0].alternatives[0].transcript')
 
     const currentTokens = getTokens(currentTranscript)
-    const lastTokens = getTokens(this.lastTranscript)
+    const lastTokens = getTokens(lastTranscript)
 
     const tokens = getNewTokens(lastTokens, currentTokens)
     tokens.forEach((token) => this.push(token))
 
-    this.lastTranscript = currentTranscript
+    lastTranscript = currentTranscript
     next()
   }
-}
 
-export const transcriptTokenizer = () => new TranscriptTokenizer()
+  return stream
+}
