@@ -17,6 +17,7 @@
         "no-plusplus": "off",
         "semi": ["error", "never"],
         "comma-dangle": ["error", "never"],
-        "no-console": "off"
+        "no-console": "off",
+        "func-names": "off"
     }
 }

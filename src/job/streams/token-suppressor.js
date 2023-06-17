@@ -1,23 +1,21 @@
 import { Transform } from 'stream'
 
-class TokenSuppressor extends Transform {
-  lastToken = ''
+export const tokenSuppressor = () => {
+  let lastToken = ''
 
-  constructor() {
-    super({ objectMode: true })
-  }
+  const stream = new Transform({ objectMode: true })
 
-  _transform(chunk, _, next) {
+  stream._transform = function (chunk, _, next) {
     const currentToken = chunk
 
-    const lastTokenMustBePushed = this.lastToken
-      && !(this.lastToken.length > 1 && currentToken.startsWith(this.lastToken))
+    const lastTokenMustBePushed = lastToken
+      && (lastToken.length <= 1 || !currentToken.startsWith(lastToken))
 
-    if (lastTokenMustBePushed) this.push(this.lastToken)
+    if (lastTokenMustBePushed) this.push(lastToken)
 
-    this.lastToken = currentToken
+    lastToken = currentToken
     next()
   }
-}
 
-export const tokenSuppressor = () => new TokenSuppressor()
+  return stream
+}
