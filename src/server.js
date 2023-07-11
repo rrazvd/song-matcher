@@ -9,7 +9,7 @@ const songMatcher = createSongMatcherJob()
 const app = express()
 
 app.listen(SERVER_PORT, () => {
-  console.log(`Song matcher listening on port ${SERVER_PORT}`)
+  console.log(`SongMatcher listening on port ${SERVER_PORT}`)
 })
 
 app.get('/', (req, res) => {

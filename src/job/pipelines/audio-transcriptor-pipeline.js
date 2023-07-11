@@ -1,4 +1,4 @@
-import { audioExtractor, audioTranscriptor } from '../streams'
+import { audioExtractor, audioTranscriptor } from './streams'
 
 export const createAudioTranscriptorPipeline = ({
   streamingUrl,

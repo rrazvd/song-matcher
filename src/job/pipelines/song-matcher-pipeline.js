@@ -4,7 +4,7 @@ import {
   transcriptTokenizer,
   tokenSuppressor,
   songMatcher
-} from '../streams'
+} from './streams'
 
 export const createSongMatcherPipeline = ({
   windowSize,
