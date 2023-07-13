@@ -12,7 +12,7 @@ class SongMatcher extends Transform {
     this.cache = cache
   }
 
-  _transform(chunk, _, next) {
+  _transform = (chunk, _, next) => {
     const token = chunk
 
     // process the current token
@@ -25,7 +25,7 @@ class SongMatcher extends Transform {
     next()
   }
 
-  processToken(token) {
+  processToken = (token) => {
     this.cache.get(token, (error, result) => {
       if (error) return
 
@@ -42,7 +42,7 @@ class SongMatcher extends Transform {
     })
   }
 
-  updateMatchs(rows) {
+  updateMatchs = (rows) => {
     if (!rows) return
     // update window with new matched ids
     this.window.push(rows)
@@ -71,17 +71,13 @@ class SongMatcher extends Transform {
     }
   }
 
-  getRanking() {
-    return Object
-      .keys(this.matchedIds)
-      .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
-      .slice(0, 5)
-      .map((songId) => ({ songId, score: this.calculateScore(songId) }))
-  }
+  calculateScore = (songId) => Math.round((this.matchedIds[songId] / this.WINDOW_SIZE) * 100)
 
-  calculateScore(songId) {
-    return Math.round((this.matchedIds[songId] / this.WINDOW_SIZE) * 100)
-  }
+  getRanking = () => Object
+    .keys(this.matchedIds)
+    .sort((a, b) => this.matchedIds[b] - this.matchedIds[a])
+    .slice(0, 5)
+    .map((songId) => ({ songId, score: this.calculateScore(songId) }))
 }
 
 export const songMatcher = ({
