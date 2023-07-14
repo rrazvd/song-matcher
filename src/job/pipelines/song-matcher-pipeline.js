@@ -8,10 +8,9 @@ import {
 
 export const createSongMatcherPipeline = ({
   windowSize,
-  database,
-  cache
+  getSongsByWord
 }) => compose(
   transcriptTokenizer(),
   tokenSuppressor(),
-  songMatcher({ windowSize, database, cache })
+  songMatcher({ windowSize, getSongsByWord })
 )

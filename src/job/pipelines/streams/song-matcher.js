@@ -1,22 +1,21 @@
 import { Transform } from 'stream'
 
 class SongMatcher extends Transform {
-  constructor(windowSize, database, cache) {
+  constructor(windowSize, getSongsByWord) {
     super({ objectMode: true })
 
     this.WINDOW_SIZE = windowSize
     this.window = []
     this.matchedIds = {}
 
-    this.database = database
-    this.cache = cache
+    this.getSongsByWord = getSongsByWord
   }
 
-  _transform = (chunk, _, next) => {
+  _transform = async (chunk, _, next) => {
     const token = chunk
 
     // process the current token
-    this.processToken(token)
+    await this.processToken(token)
 
     // compute a descending ranking
     const ranking = this.getRanking()
@@ -25,30 +24,20 @@ class SongMatcher extends Transform {
     next()
   }
 
-  processToken = (token) => {
-    this.cache.get(token, (error, result) => {
-      if (error) return
-
-      if (result) {
-        const rows = JSON.parse(result)
-        this.updateMatchs(rows)
-        return
-      }
-
-      this.database.all(`SELECT mxm_tid FROM lyrics where word='${token}'`, (err, rows) => {
-        this.cache.set(token, JSON.stringify(rows))
-        this.updateMatchs(rows)
-      })
-    })
+  processToken = async (token) => {
+    const word = token
+    const songs = await this.getSongsByWord(word)
+    this.updateMatchs(songs)
   }
 
-  updateMatchs = (rows) => {
-    if (!rows) return
+  updateMatchs = (songs) => {
+    if (!songs) return
+
     // update window with new matched ids
-    this.window.push(rows)
+    this.window.push(songs)
 
     // increase a counter for each matched id
-    rows.forEach(({ mxm_tid: songId }) => {
+    songs.forEach(({ id: songId }) => {
       if (this.matchedIds[songId] !== undefined) {
         this.matchedIds[songId] += 1
         return
@@ -57,11 +46,11 @@ class SongMatcher extends Transform {
     })
 
     if (this.window.length > this.WINDOW_SIZE) {
-      // update window removing expired matched ids
-      const expiredMatchedIds = this.window.shift()
+      // update window removing expired matched songs
+      const expiredSongs = this.window.shift()
 
       // decrease a counter for each expired matched id
-      expiredMatchedIds.forEach(({ mxm_tid: songId }) => {
+      expiredSongs.forEach(({ id: songId }) => {
         if (this.matchedIds[songId] > 1) {
           this.matchedIds[songId] -= 1
           return
@@ -82,6 +71,5 @@ class SongMatcher extends Transform {
 
 export const songMatcher = ({
   windowSize,
-  database,
-  cache
-}) => new SongMatcher(windowSize, database, cache)
+  getSongsByWord
+}) => new SongMatcher(windowSize, getSongsByWord)

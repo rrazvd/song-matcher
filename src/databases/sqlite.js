@@ -9,5 +9,15 @@ export const createSqliteDatabase = (path) => {
     console.log('SQLite database has successfully opened.')
   })
 
-  return db
+  return {
+    instance: db,
+    methods: {
+      get: async (query) => new Promise((resolve, reject) => {
+        db.all(query, (err, rows) => {
+          if (err) return reject(err.message)
+          return resolve(rows)
+        })
+      })
+    }
+  }
 }

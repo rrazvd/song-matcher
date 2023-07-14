@@ -11,6 +11,8 @@ import {
   createSqliteDatabase
 } from '../databases'
 
+import { createSongsRepository } from '../repositories'
+
 import {
   createAudioTranscriptorPipeline,
   createSongMatcherPipeline
@@ -19,10 +21,16 @@ import {
 export const createSongMatcherJob = () => {
   let audioTranscriptor = null
 
+  const { getSongsByWord } = createSongsRepository({
+    clients: {
+      database: createSqliteDatabase(MXM_DATASET_PATH),
+      cache: createRedisDatabase()
+    }
+  })
+
   const songMatcher = createSongMatcherPipeline({
     windowSize: SONG_MATCHER_WINDOW_SIZE,
-    database: createSqliteDatabase(MXM_DATASET_PATH),
-    cache: createRedisDatabase()
+    getSongsByWord
   })
 
   const transcriptCallback = (chunk) => {
