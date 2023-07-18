@@ -5,9 +5,7 @@ export const createRedisDatabase = () => {
 
   return {
     instance: db,
-    methods: {
-      get: (key, ...args) => db.get(key, ...args),
-      set: (key, value, ...args) => db.set(key, value, ...args)
-    }
+    get: (...args) => db.get(...args),
+    set: (...args) => db.set(...args)
   }
 }

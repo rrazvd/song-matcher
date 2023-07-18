@@ -11,13 +11,11 @@ export const createSqliteDatabase = (path) => {
 
   return {
     instance: db,
-    methods: {
-      get: async (query) => new Promise((resolve, reject) => {
-        db.all(query, (err, rows) => {
-          if (err) return reject(err.message)
-          return resolve(rows)
-        })
+    get: async (query) => new Promise((resolve, reject) => {
+      db.all(query, (err, rows) => {
+        if (err) return reject(err.message)
+        return resolve(rows)
       })
-    }
+    })
   }
 }
